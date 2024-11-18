@@ -25,40 +25,44 @@ questionsPlural = {
 
 }
 
-# random.sample randomizes the order of questions
-num_questions = min(num_questions_per_quiz, len(questionsPlural))
-questions = random.sample(list(questionsPlural.items()), k=num_questions)
+# this function deals with the number of questions and the questions overall
+def prepare_questions(questions, num_questions): 
+    num_questions = min(num_questions, len(questions))
+    return random.sample(list(questions.items()), k=num_questions)
 
-
-# this sets the score to 0 so that you can start keeping score at 0
-score = 0 
-
-# for loop that grabs and numbers the questions
-# it also labels the question answers in ABCD format and sorts them randomly
-for num, (question, alternatives) in enumerate(questions, start=1):
-    print(f"\nQuestion {num}: ")
+# this function displays the question and answer choices, 
+# using ascii_lowercase to add the ABCD and then labels them accordingly
+# then it checks to make sure user input is valid and collects the 
+# user input
+# to help better understand, this function represents the user's answer when
+# called elsewhere 
+def get_answer(question, alternatives):
     print(f"{question}")
-    correct_answer = alternatives[0]
-    # randomizes the order of answers
-    labeled_alternatives = dict(
-        zip(ascii_lowercase, random.sample(alternatives, k=len(alternatives)))
-    )
+    labeled_alternatives = dict(zip(ascii_lowercase, alternatives))
     for label, alternative in labeled_alternatives.items():
         print(f"    {label}) {alternative}")
 
-# This part grabs the user input and checks to make sure 
-# the user input is valid
     while (answer_label := input("\nChoice? ")) not in labeled_alternatives:
-        print(f"Please pick one of the following: {', '.join(labeled_alternatives)}")
+        print(f"Please pick either {', '.join(labeled_alternatives)}")
 
-    # This part see's if the choice is correct or not and ouputs accordingly
-    answer = labeled_alternatives[answer_label]
+    return labeled_alternatives[answer_label]
+
+
+# this function makes the choices random, 
+# collects the user input to check and see if it is right, and displays
+# an output accordingly
+def ask_question(question, alternatives):
+    correct_answer = alternatives[0]
+    ordered_alternatives = random.sample(alternatives, k=len(alternatives))
+
+    
+    answer = get_answer(question, ordered_alternatives)
     if answer == correct_answer:
-        # this adds to the score
-        score += 1
-        print("Correct!")
+        print("Correct!!")
+        return True # or you could put 1, True = 1, False = 0
     else:
-        print(f"The answer is {correct_answer!r}, not {answer!r}!")
+        print(f"The answer is {correct_answer!r}, not {answer!r}")
+        return False
 
 
-print(f"\nYou got {score} correct out of {num} questions")
+# def run_quiz():

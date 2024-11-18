@@ -36,10 +36,13 @@ for num, (question, alternatives) in enumerate(questionsPlural.items(), start=1)
     for label, alternative in labeled_alternatives.items():
         print(f"    {label}) {alternative}")
 
-# This part of the for loop grabs the user input and checks 
-# to see if its correct or not
-    answer_label = input("\nChoice? ")
-    answer = labeled_alternatives.get(answer_label)
+# This part grabs the user input and checks to make sure 
+# the user input is valid
+    while (answer_label := input("\nChoice? ")) not in labeled_alternatives:
+        print(f"Please answer one of {', '.join(labeled_alternatives)}")
+
+    # This part see's if the choice is correct or not and ouputs accordingly
+    answer = labeled_alternatives[answer_label]
     if answer == correct_answer:
         # this adds to the score
         score += 1

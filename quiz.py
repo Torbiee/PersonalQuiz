@@ -1,10 +1,12 @@
 # This is the main file for my Personal Quiz
 # A portion of this is from following the guide at https://realpython.com/python-quiz-application/
 
-
-#import that allows the A, B, C, D options
+# imports randomness to the file
+import random
+# import that allows the A, B, C, D options
 from string import ascii_lowercase
 
+num_questions_per_quiz = 5
 # questions put in a dictionary and the answers in a list?
 # double check that though
 questionsPlural = {
@@ -23,23 +25,31 @@ questionsPlural = {
 
 }
 
+# random.sample randomizes the order of questions
+num_questions = min(num_questions_per_quiz, len(questionsPlural))
+questions = random.sample(list(questionsPlural.items()), k=num_questions)
+
+
 # this sets the score to 0 so that you can start keeping score at 0
 score = 0 
 
 # for loop that grabs and numbers the questions
 # it also labels the question answers in ABCD format and sorts them randomly
-for num, (question, alternatives) in enumerate(questionsPlural.items(), start=1):
+for num, (question, alternatives) in enumerate(questions, start=1):
     print(f"\nQuestion {num}: ")
     print(f"{question}")
     correct_answer = alternatives[0]
-    labeled_alternatives = dict(zip(ascii_lowercase, sorted(alternatives)))
+    # randomizes the order of answers
+    labeled_alternatives = dict(
+        zip(ascii_lowercase, random.sample(alternatives, k=len(alternatives)))
+    )
     for label, alternative in labeled_alternatives.items():
         print(f"    {label}) {alternative}")
 
 # This part grabs the user input and checks to make sure 
 # the user input is valid
     while (answer_label := input("\nChoice? ")) not in labeled_alternatives:
-        print(f"Please answer one of {', '.join(labeled_alternatives)}")
+        print(f"Please pick one of the following: {', '.join(labeled_alternatives)}")
 
     # This part see's if the choice is correct or not and ouputs accordingly
     answer = labeled_alternatives[answer_label]

@@ -65,4 +65,21 @@ def ask_question(question, alternatives):
         return False
 
 
-# def run_quiz():
+def run_quiz():
+    questions = prepare_questions(
+        questionsPlural, num_questions=num_questions_per_quiz
+    )
+
+    score = 0
+    for num, (question, alternatives) in enumerate(questions, start=1):
+        print(f"\nQuestion {num}: ")
+        score += ask_question(question, alternatives)
+    
+    print(f"\nYou got {score} correct out of {num} questions!")
+
+
+# this runs the program, if you tried to run it without this, 
+# nothing would happen
+if __name__ == "__main__":
+    run_quiz()
+
